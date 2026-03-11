@@ -8,9 +8,6 @@ La plataforma busca **mejorar la transparencia financiera**, permitiendo al usua
 
 ## 📱 Vista Previa de la Aplicación
 
-> *(Aquí puedes agregar capturas de pantalla de la app)*
-
-```markdown
 ![Login](./Capturas%20de%20pantalla%20del%20prototipado/Login.png)
 ![Olvide mi contraseña](./Capturas%20de%20pantalla%20del%20prototipado/Olvide%20mi%20contraseña.png)
 ![Register](./Capturas%20de%20pantalla%20del%20prototipado/Register.png)
@@ -18,7 +15,7 @@ La plataforma busca **mejorar la transparencia financiera**, permitiendo al usua
 ![Detalle](./Capturas%20de%20pantalla%20del%20prototipado/Detalle%20del%20credito.png)
 ![Perfil](./Capturas%20de%20pantalla%20del%20prototipado/Perfil.png)
 
-```
+
 
 ---
 
