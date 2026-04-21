@@ -14,7 +14,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../Services/firebaseConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+//import CargaMasivaFirestore from "../Services/CargaMasivaFirestore";
+import { useNavigation } from '@react-navigation/native';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -23,11 +24,15 @@ export default function LoginScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
 
-
   // 🔹 Solo usamos esto para mostrar el indicador inicial (sin redirección automática)
   useEffect(() => {
     setInitializing(false);
   }, []);
+
+  //const loader = new CargaMasivaFirestore();
+
+  // 🔥 Cargar 500 usuarios con créditos
+  //loader.cargarDatosMasivos(1);
 
   // 🔹 Validar formato de email
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -55,6 +60,8 @@ export default function LoginScreen({ navigation }) {
       await AsyncStorage.setItem('userUID', uid);
 
       Alert.alert('Login exitoso', 'Bienvenido');
+      navigation.navigate('Home');
+
 
     } catch (error) {
       let message = '';
