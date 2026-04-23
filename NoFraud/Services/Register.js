@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
 import {
     doc,
     setDoc,
@@ -100,5 +100,23 @@ export const cerrarSesion = async () => {
     } catch (error) {
         console.log(error);
         return { success: false, error: error.message };
+    }
+};
+
+export const recuperarContrasena = async (email) => {
+    try {
+        await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+        console.log("Error recuperación:", error);
+
+        let mensaje = "Ocurrió un error";
+
+        if (error.code === "auth/user-not-found") {
+            mensaje = "El correo no está registrado";
+        } else if (error.code === "auth/invalid-email") {
+            mensaje = "Correo inválido";
+        }
+
+        throw new Error(mensaje);
     }
 };

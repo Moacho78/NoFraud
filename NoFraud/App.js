@@ -9,6 +9,8 @@ import HomeScreen from "./screens/HomeScreen";
 import CreditDetail from "./screens/CreditDetail";
 import Historial from "./screens/Historial";
 import Perfil from "./screens/Perfil";
+import RecuperarContrasena  from "./screens/ForgotPassword";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -50,6 +52,12 @@ export default function App() {
         <Stack.Screen
           name="Perfil"
           component={Perfil}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="Recuperar"
+          component={RecuperarContrasena}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
