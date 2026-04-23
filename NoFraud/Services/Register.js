@@ -1,11 +1,12 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import {
     doc,
     setDoc,
     collection,
     query,
     where,
-    getDocs
+    getDocs,
+    getDoc
 } from "firebase/firestore";
 import { auth, db } from "./firebaseConfig";
 
@@ -64,6 +65,40 @@ export const registerUser = async (form) => {
             return { success: false, error: "El correo ya está registrado" };
         }
 
+        return { success: false, error: error.message };
+    }
+};
+
+// 📌 Obtener usuario por UID logueado
+export const getUserData = async () => {
+    try {
+        const user = auth.currentUser;
+
+        if (!user) {
+            return { success: false, error: "No hay usuario autenticado" };
+        }
+
+        const docRef = doc(db, "usuarios", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            return { success: true, data: docSnap.data() };
+        } else {
+            return { success: false, error: "Usuario no encontrado" };
+        }
+
+    } catch (error) {
+        console.log(error);
+        return { success: false, error: error.message };
+    }
+};
+
+export const cerrarSesion = async () => {
+    try {
+        await signOut(auth);
+        return { success: true };
+    } catch (error) {
+        console.log(error);
         return { success: false, error: error.message };
     }
 };

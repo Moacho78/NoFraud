@@ -8,7 +8,7 @@ import RegisterScreen from "./screens/Register";
 import HomeScreen from "./screens/HomeScreen";
 import CreditDetail from "./screens/CreditDetail";
 import Historial from "./screens/Historial";
-
+import Perfil from "./screens/Perfil";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -44,6 +44,12 @@ export default function App() {
         <Stack.Screen
           name="Historial"
           component={Historial}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="Perfil"
+          component={Perfil}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

@@ -1,14 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
     StyleSheet,
     TouchableOpacity,
-    SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { getUserData } from "../Services/Register";
+import BottomNavbar from "./BottomNavbar";
+import { cerrarSesion } from "../Services/Register";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 const PerfilScreen = () => {
+
+    const [usuario, setUsuario] = useState(null);
+    const navigation = useNavigation();
+
+    useEffect(() => {
+        const cargarUsuario = async () => {
+            const response = await getUserData();
+
+            if (response.success) {
+                setUsuario(response.data);
+            } else {
+                console.log(response.error);
+            }
+        };
+
+        cargarUsuario();
+    }, []);
+
+    const handleLogout = async () => {
+        try {
+            // 1️⃣ Cerrar sesión en Firebase
+            const response = await cerrarSesion();
+
+            if (!response.success) {
+                console.log(response.error);
+                return;
+            }
+
+            // 2️⃣ Limpiar AsyncStorage
+            await AsyncStorage.clear();
+
+            // 3️⃣ Navegar al login (reinicia el stack)
+            navigation.reset({
+                index: 0,
+                routes: [{ name: "Login" }],
+            });
+
+        } catch (error) {
+            console.log("Error al cerrar sesión:", error);
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
 
@@ -19,9 +66,9 @@ const PerfilScreen = () => {
 
             {/* Card usuario */}
             <View style={styles.card}>
-                <Text style={styles.nombre}>Carlos Mendoza</Text>
-                <Text style={styles.info}>andreavcp@hotmail.com</Text>
-                <Text style={styles.info}>C.C 1097781744</Text>
+                <Text style={styles.nombre}> {usuario?.nombre || "Cargando..."}</Text>
+                <Text style={styles.info}> {usuario?.correo || "Cargando..."}</Text>
+                <Text style={styles.info}>{usuario?.tipo_documento} {usuario?.numero_documento}</Text>
             </View>
 
             {/* Seguridad */}
@@ -47,28 +94,10 @@ const PerfilScreen = () => {
             </View>
 
             {/* Botón cerrar sesión */}
-            <TouchableOpacity style={styles.logoutButton}>
+            <TouchableOpacity style={styles.logoutButton}  onPress={handleLogout}>
                 <Text style={styles.logoutText}>Cerrar sesión</Text>
             </TouchableOpacity>
-
-            {/* Navbar (puedes reemplazarlo por tu componente) */}
-            <View style={styles.navbar}>
-                <TouchableOpacity style={styles.navItem}>
-                    <Ionicons name="home-outline" size={22} color="#555" />
-                    <Text style={styles.navText}>Inicio</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.navItem}>
-                    <Ionicons name="time-outline" size={22} color="#555" />
-                    <Text style={styles.navText}>Historial</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.navItem}>
-                    <Ionicons name="person" size={22} color="#0A84FF" />
-                    <Text style={[styles.navText, { color: "#0A84FF" }]}>Perfil</Text>
-                </TouchableOpacity>
-            </View>
-
+            <BottomNavbar />
         </SafeAreaView>
     );
 };
