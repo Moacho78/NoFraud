@@ -26,6 +26,7 @@ export default function CreditDetailScreen({ route }) {
             const data = await obtenerCreditoPorId(uid, creditId);
             setCredit(data);
             setLoading(false);
+            
         };
 
         cargarCredito();
@@ -35,26 +36,28 @@ export default function CreditDetailScreen({ route }) {
         switch (estado?.toLowerCase()) {
             case "aprobado":
             case "al día":
-                return "green";
+                return "green"
             case "pendiente":
-                return "orange";
+                return "orange"
             case "mora":
-                return "red";
+                return "red"
+                 case "En tramite":
+                return "blue"
             default:
-                return "#555";
+                return "#555"
         }
     };
 
     const formatDate = (timestamp) => {
-        if (!timestamp) return "";
+        if (!timestamp) return "N/A"
 
         // Firestore Timestamp
         if (timestamp.seconds) {
-            return new Date(timestamp.seconds * 1000).toLocaleDateString();
+            return new Date(timestamp.seconds * 1000).toLocaleDateString()
         }
 
         // Si ya es string o Date
-        return new Date(timestamp).toLocaleDateString();
+        return new Date(timestamp).toLocaleDateString()
     };
 
     if (loading) {
@@ -74,7 +77,7 @@ export default function CreditDetailScreen({ route }) {
     }
 
     return (
-        <SafeAreaView style={styles.safe}> {/* 👈 envuelve todo */}
+        <SafeAreaView style={styles.safe}> 
             <ScrollView style={styles.container}>
                 {/* HEADER */}
                 <View style={styles.header}>
@@ -88,7 +91,7 @@ export default function CreditDetailScreen({ route }) {
                         style={styles.logo}
                     />
 
-                    <Text style={styles.bank}>{credit.entidad}</Text>
+                    <Text style={styles.bank}>{credit.entidad }</Text>
 
                     <Text style={styles.subtitle}>Estado del crédito</Text>
 
@@ -113,7 +116,7 @@ export default function CreditDetailScreen({ route }) {
                 <View style={styles.card}>
                     <Text style={styles.sectionTitle}>Monto del préstamo</Text>
                     <Text style={styles.amount}>
-                        ${credit.monto?.toLocaleString()}
+                        ${Number(credit.monto || 0).toLocaleString()}
                     </Text>
 
                     <View style={styles.rowBetween}>
@@ -132,7 +135,7 @@ export default function CreditDetailScreen({ route }) {
 
                     <View style={styles.rowBetween}>
                         <View style={styles.rowIcon}>
-                            <MaterialCommunityIcons
+                           <MaterialCommunityIcons
                                 name="cash"
                                 size={18}
                                 color="#555"
@@ -140,7 +143,7 @@ export default function CreditDetailScreen({ route }) {
                             <View>
                                 <Text style={styles.label}>Cuota Mensual</Text>
                                 <Text style={styles.value}>
-                                    ${credit.cuota?.toLocaleString()}
+                                    ${Number(credit.cuota || 0).toLocaleString()}
                                 </Text>
                             </View>
                         </View>
@@ -160,7 +163,7 @@ export default function CreditDetailScreen({ route }) {
                 {/* CARD TASA */}
                 <View style={styles.cardSmall}>
                     <View style={styles.rowIcon}>
-                        <MaterialCommunityIcons name="percent" size={18} />
+                       <MaterialCommunityIcons name="percent" size={18}></MaterialCommunityIcons>
                         <Text style={styles.label}>Tasa de Interés</Text>
                     </View>
                     <Text style={styles.value}>{credit.tasa_interes}</Text>

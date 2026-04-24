@@ -1,10 +1,16 @@
-import { collection, getDocs, doc, getDoc ,query, where} from "firebase/firestore";
+import { collection, getDocs, doc, getDoc, query, where } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 
 export const obtenerCreditos = async (uid) => {
   try {
     const creditosRef = collection(db, "usuarios", uid, "creditos");
-    const querySnapshot = await getDocs(creditosRef);
+
+    const q = query(
+      creditosRef,
+      where("estado", "not-in", ["cancelado", "finalizado"])
+    );
+
+    const querySnapshot = await getDocs(q);
 
     const creditos = [];
 
